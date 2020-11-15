@@ -1,0 +1,43 @@
+<?php
+class Model
+{
+    protected static function dbConnect()
+    {
+        $serveur = 'localhost';
+        $user = 'root';
+        $bdd = 'blog_mvc';
+        $pass = '';
+        $port = '';
+        try {
+            $cnx = new PDO('mysql:host='.$serveur.';port='.$port.';dbname='.$bdd, $user, $pass);
+            return $cnx;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+
+    protected static $table_name;
+    
+    public static function find($id)
+    {
+        $table_name = static::$table_name;
+
+        $connexion = self::dbConnect();
+        $query = $connexion->prepare("SELECT * FROM  " . self::guessTableName() . " WHERE id = :id");
+
+        $query->execute(['id' => $id]);
+        $data = $query->fetchObject(static::class);
+        return $data;
+    }
+
+
+    private static function guessTableName()
+    {
+        if (isset(static::$table_name)) {
+            return static::$table_name;
+        } else {
+            return strtolower(static::class) . 's';
+        }
+    }
+}

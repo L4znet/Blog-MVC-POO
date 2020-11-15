@@ -1,0 +1,12 @@
+{
+    "name": "charly/blog_mvc_poo",
+    "require": {
+        "michelf/php-markdown": "^1.9"
+    },
+    "authors": [
+        {
+            "name": "Charly",
+            "email": "charly2221@hotmail.fr"
+        }
+    ]
+}
