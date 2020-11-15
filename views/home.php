@@ -3,7 +3,7 @@
 <div class="row mb-2 d-flex">
     <?php
      foreach ($articles as $article):
-        if (is_null($article->deleted_at)):
+        if (is_null($article->deleted)):
         $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9\-]+/', '-', $article->title)));
     ?>
 

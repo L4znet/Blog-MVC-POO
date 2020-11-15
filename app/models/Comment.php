@@ -6,7 +6,7 @@ class Comment extends Model
     public static function get()
     {
         $connexion = self::dbConnect();
-        $query = $connexion->prepare("SELECT * FROM comments WHERE deleted_at IS NULL AND validate = :validate ORDER BY created_at DESC");
+        $query = $connexion->prepare("SELECT * FROM comments WHERE deleted IS NULL AND validate = :validate ORDER BY created_at DESC");
 
         $query->execute(['validate' => 0]);
         return $query->fetchAll(PDO::FETCH_CLASS, 'Comment');

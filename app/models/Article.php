@@ -39,9 +39,9 @@ class Article extends Model
 
     public static function soft_destroy($id)
     {
-        $q = array('deleted_at' => 1, 'id' => $id);
+        $q = array('deleted' => 1, 'id' => $id);
         $connexion = self::dbConnect();
-        $query = $connexion->prepare("UPDATE articles SET deleted_at = :deleted_at WHERE id = :id");
+        $query = $connexion->prepare("UPDATE articles SET deleted = :deleted WHERE id = :id");
 
         $query->execute($q);
         $id = $connexion->lastInsertId();
@@ -51,9 +51,9 @@ class Article extends Model
 
     public static function restore($id)
     {
-        $q = array('deleted_at' => null, 'id' => $id);
+        $q = array('deleted' => null, 'id' => $id);
         $connexion = self::dbConnect();
-        $query = $connexion->prepare("UPDATE articles SET deleted_at = :deleted_at WHERE id = :id");
+        $query = $connexion->prepare("UPDATE articles SET deleted = :deleted WHERE id = :id");
 
         $query->execute($q);
         $id = $connexion->lastInsertId();
