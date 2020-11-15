@@ -2,7 +2,7 @@
 Un blog MVC en POO réalisé dans le cadre de mes études
 
 
-## Structure de donnnées : 
+## Structure de données : 
 
 3 bases de données : articles, comments, users
 
