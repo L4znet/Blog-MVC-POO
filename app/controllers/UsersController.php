@@ -80,26 +80,4 @@ class UsersController extends Controller
         
         $view->render(compact('data', 'errors'));
     }
-    public function store($data)
-    {
-        $errors = [];
-
-        if (empty($data['title'])) {
-            $errors['title'] = "Le titre est vide";
-        }
-        if (empty($data['text'])) {
-            $errors['text'] = "Le contenu est vide";
-        }
-        if (empty($errors)) {
-            $article = Article::create($data);
-            
-            flash("message", "L'article a bien été posté !");
-            header('location:' .  BASE_URL . '/article/' . $article->id);
-        } else {
-            flash('data', $data);
-            flash('error', $errors);
-            
-            header('location:' .  BASE_URL . '/article/create');
-        }
-    }
 }
