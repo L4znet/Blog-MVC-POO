@@ -3,17 +3,7 @@ class Model
 {
     protected static function dbConnect()
     {
-        $serveur = 'localhost';
-        $user = 'root';
-        $bdd = 'blog_mvc';
-        $pass = '';
-        $port = '';
-        try {
-            $cnx = new PDO('mysql:host='.$serveur.';port='.$port.';dbname='.$bdd, $user, $pass);
-            return $cnx;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
+        return new PDO('mysql:host=localhost;port=;dbname=blog_mvc', 'root', '');
     }
 
 
