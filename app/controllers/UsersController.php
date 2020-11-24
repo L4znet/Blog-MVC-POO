@@ -1,16 +1,31 @@
 <?php
 class UsersController extends Controller
 {
+    public function show()
+    {
+        $users = Users::get();
+        $data = compact('users');
+        $view = new View('users-manage');
+        $view->render($data);
+    }
+
+    public function delete($id)
+    {
+        Users::delete($id);
+        redirect('/users/manage');
+    }
+
     public function index()
     {
         $view = new View('connect');
         $view->render();
     }
 
+    
     public function logout()
     {
         unset($_SESSION['auth']);
-        header('location:' .  BASE_URL);
+        redirect();
     }
 
     public function auth($data)
@@ -35,8 +50,9 @@ class UsersController extends Controller
 
         if (empty($errors)) {
             $_SESSION['auth'] = array('id' => $dataFromDb->id, 'auth' => true);
-            header('location:' .  BASE_URL);
+            redirect();
         } else {
+            // Affichage des erreurs
         }
     }
 
@@ -57,27 +73,19 @@ class UsersController extends Controller
 
     public function cant()
     {
-        header('location:' .  BASE_URL);
+        redirect();
     }
 
-    public function show($id)
+    public function store($data)
     {
-        $view = new View('article');
-                        
-        $view->render($data);
-    }
-    public function create($data)
-    {
-        $view = new View('article-create');
-        
-        $data = $_SESSION['data'] ?? null;
-        $errors = $_SESSION['errors'] ?? null;
+        $errors = [];
 
-
-        unset($_SESSION['data']);
-        unset($_SESSION['errors']);
-
-        
-        $view->render(compact('data', 'errors'));
+        if ($this->checkfield($data)) {
+            $article = Users::create($data);
+            flash("message", "L'utilisateur a bien été créé");
+            redirect('/users/manage');
+        } else {
+            redirect('/users/manage');
+        }
     }
 }
