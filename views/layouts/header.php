@@ -21,6 +21,7 @@
         <link rel="manifest" href="/docs/4.5/assets/img/favicons/manifest.json">
         <link rel="mask-icon" href="/docs/4.5/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
         <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon.ico">
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css' />
         <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
         <meta name="theme-color" content="#563d7c">
         <!-- Custom styles for this template -->
@@ -40,25 +41,27 @@
                             <li class="nav-item active">
                                 <a class="nav-link" href="<?= BASE_URL ?>"> Home <span class="sr-only">(current)</span></a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= BASE_URL ?>/article/deleted">Article supprimé</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= BASE_URL ?>/article/comments">Commentaires</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="<?= BASE_URL ?>/article/create">Poster un article</a>
-                            </li>
-
                             <?php
                                 if (isset($_SESSION['auth']['auth']) && $_SESSION['auth']['auth']) {
                                     echo '<li class="nav-item">
-                                        <a class="nav-link" href="'.BASE_URL.'/users/logout">Déconnexion</a>
-                                     </li>';
+                                <a class="nav-link" href="' .  BASE_URL . '/article/deleted">Article supprimé</a>
+                            </li>';
+                                    echo '<li class="nav-item">
+                                <a class="nav-link" href="' .  BASE_URL . '/article/comments">Commentaires</a>
+                            </li>';
+                                    echo '<li class="nav-item">
+                                <a class="nav-link" href="' .  BASE_URL . '/article/create">Poster un article</a>
+                            </li>';
+                                    echo '<li class="nav-item">
+                                <a class="nav-link" href="' .  BASE_URL . '/users/manage">Utilisateurs</a>
+                            </li>';
+                                    echo '<li class="nav-item">
+                                <a class="nav-link" href="'. BASE_URL .'/users/logout">Déconnexion</a>
+                            </li>';
                                 } else {
                                     echo '<li class="nav-item">
-                                        <a class="nav-link" href="'.BASE_URL.'/users/connect">Connexion</a>
-                                    </li>';
+                                <a class="nav-link" href="'. BASE_URL .'/users/connect">Connexion</a>
+                            </li>';
                                 }
 
                             ?>
