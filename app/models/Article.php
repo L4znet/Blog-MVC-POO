@@ -3,15 +3,8 @@ class Article extends Model
 {
     protected static $table_name = 'articles';
 
-    public static function get()
-    {
-        $connexion = self::dbConnect();
-        $query = $connexion->prepare("SELECT * FROM articles ORDER BY id DESC");
 
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_CLASS, 'Article');
-    }
-
+    
 
     public static function create($data)
     {
