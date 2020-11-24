@@ -16,3 +16,13 @@ function unflash($key, $default = null)
     unset($_SESSION['___FLASH___'][$key]);
     return $value;
 }
+
+
+function redirect($url = "")
+{
+    if (empty($url)) {
+        header('location:' . BASE_URL);
+    } else {
+        header('location:' . BASE_URL . $url);
+    }
+}
