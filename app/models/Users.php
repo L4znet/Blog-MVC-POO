@@ -27,25 +27,20 @@ class Users extends Model
     public static function create($data)
     {
         $connexion = self::dbConnect();
-        $query = $connexion->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
-
-       
-        $query->execute($data);
-        $id = $connexion->lastInsertId();
-
-        return Users::find($id);
+        $query = $connexion->prepare("INSERT INTO users (username, password, lastname, firstname, email, adress, zipcode, city, phone, grade) VALUES (:username, :password, :lastname, :firstname, :email, :adress, :zipcode, :city, :phone, :grade)");
+        $test = $query->execute($data);
+        if (!$test) {
+            printf("Message d'erreur : %s\n", $connexion->error);
+            die;
+        }
     }
 
     public static function update($data, $id)
     {
-        $q = array('title' => $data['title'], 'text' => $data['text'], 'id' => $id, 'updated_at' => date('Y-m-d H:i:s'));
+        $q = array('lastname' => $data['lastname'], 'password' => $data['password'],  'firstname' => $data['firstname'], 'username' => $data['username'], 'email' => $data['email'], 'adress' => $data['adress'], 'zipcode' => $data['zipcode'], 'city' => $data['city'], 'grade' => $data['grade'], 'phone' => $data['phone'], 'id' => $id, 'updated_at' => date('Y-m-d H:i:s'));
         $connexion = self::dbConnect();
-        $query = $connexion->prepare("UPDATE users SET username = :username, password = :password, updated_at = :updated_at WHERE id = :id");
-
+        $query = $connexion->prepare("UPDATE users SET lastname = :lastname, password = :password,  firstname = :firstname, username = :username, email = :email, adress = :adress, zipcode = :zipcode, city = :city, phone = :phone, grade = :grade, updated_at = :updated_at WHERE id = :id");
         $query->execute($q);
-        $id = $connexion->lastInsertId();
-
-        return Article::find($id);
     }
 
     public static function can($rank_needed, $id)
@@ -61,5 +56,13 @@ class Users extends Model
         } else {
             return false;
         }
+    }
+
+    public static function delete($id)
+    {
+        $connexion = self::dbConnect();
+        $query = $connexion->prepare("DELETE FROM  users WHERE id = :id");
+
+        $query->execute(['id' => $id]);
     }
 }
