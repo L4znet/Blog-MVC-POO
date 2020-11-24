@@ -3,12 +3,25 @@ class Model
 {
     protected static function dbConnect()
     {
-        return new PDO('mysql:host=localhost;port=;dbname=blog_mvc', 'root', '');
+        $pdo = new PDO('mysql:host=localhost;port=;dbname=blog_mvc', 'root', '');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        return $pdo;
+    }
+    protected static $table_name;
+
+
+
+    public static function get()
+    {
+        $connexion = self::dbConnect();
+        $query = $connexion->prepare("SELECT * FROM " . self::guessTableName() . " ORDER BY id DESC");
+
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_CLASS, 'Model');
     }
 
 
-    protected static $table_name;
-    
     public static function find($id)
     {
         $table_name = static::$table_name;
@@ -29,15 +42,5 @@ class Model
         } else {
             return strtolower(static::class) . 's';
         }
-    }
-
-    public static function delete($id)
-    {
-        $connexion = self::dbConnect();
-        $query = $connexion->prepare("DELETE FROM  " . self::guessTableName() . " WHERE id = :id");
-
-        $query->execute(['id' => $id]);
-
-        return this::find($id);
     }
 }
