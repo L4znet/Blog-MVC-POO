@@ -26,3 +26,19 @@ function redirect($url = "")
         header('location:' . BASE_URL . $url);
     }
 }
+
+function switch_grade($grade)
+{
+    switch ($grade) {
+        case 0:
+            $grade = "Utilisateur";
+        break;
+        case 1:
+            $grade = "Modérateur";
+        break;
+        case 2:
+            $grade = "Administrateur";
+        break;
+    }
+    return $grade;
+}
