@@ -21,32 +21,79 @@ require('app/models/Users.php');
 $uri = $_SERVER['REQUEST_URI'];
 $uri = substr($uri, strlen(BASE_URL));
 $uri = '/' . trim($uri, '/');
-$users_controller = new UsersController();
+
 
 if (isset($_SESSION['auth'])) {
     $auth = $_SESSION['auth'];
 }
 
 switch (1) {
-    case preg_match('#^/users/logout$#i', $uri):
+
+    case preg_match('#^/users/edit/([0-9]+)$#i', $uri, $matches):
        
+        $controller = new UsersController();
+         if (isset($auth)) {
+             $can = $controller->can(2, $controller->getRank($auth['id']));
+             if ($can) {
+                 $users = Users::find($matches[0]);
+                 $view = new View('users-manage');
+                 $data = compact('users');
+                 $view->render($data);
+             } else {
+                 $users_controller->cant();
+             }
+         } else {
+             $users_controller->cant();
+         }
+        break;
+    case preg_match('#^/users/delete/([0-9]+)$#i', $uri):
+       
+        $controller = new UsersController();
+         if (isset($auth)) {
+             $can = $controller->can(2, $controller->getRank($auth['id']));
+             if ($can) {
+                 $controller->delete($matches[0]);
+             } else {
+                 $users_controller->cant();
+             }
+         } else {
+             $users_controller->cant();
+         }
+        break;
+    case preg_match('#^/users/manage$#i', $uri):
+       
+        $controller = new UsersController();
+         if (isset($auth)) {
+             $can = $controller->can(2, $controller->getRank($auth['id']));
+             if ($can) {
+                 $controller->show();
+             } else {
+                 $users_controller->cant();
+             }
+         } else {
+             $users_controller->cant();
+         }
+        break;
+
+    case preg_match('#^/users/logout$#i', $uri):
+       $controller = new UsersController();
         $users_controller->logout();
 
         break;
     case preg_match('#^/users/connect$#i', $uri):
-       
+       $controller = new UsersController();
         $users_controller->index();
 
         break;
     case preg_match('#^/users/auth$#i', $uri):
-       
+       $controller = new UsersController();
         $users_controller->auth($_POST);
 
         break;
 
     case preg_match('#^/article/comments$#i', $uri):
        
-       
+       $users_controller = new UsersController();
          if (isset($auth)) {
              $can = $users_controller->can(2, $users_controller->getRank($auth['id']));
              if ($can) {
@@ -119,7 +166,7 @@ switch (1) {
 
     case preg_match('#^/article/create$#', $uri):
        
-       
+         $users_controller = new UsersController();
         if (isset($auth)) {
             $can = $users_controller->can(2, $users_controller->getRank($auth['id']));
             if ($can) {
@@ -141,7 +188,7 @@ switch (1) {
         break;
 
     case preg_match('#^/article/([0-9]+)/edit$#i', $uri, $matches):
-
+        $users_controller = new UsersController();
         if (isset($auth)) {
             $can = $users_controller->can(2, $users_controller->getRank($auth['id']));
             if ($can) {
@@ -167,12 +214,12 @@ switch (1) {
     case preg_match('#^/article/deleted$#i', $uri, $matches):
        
          $controller = new ArticleController();
-                $controller->softdelete();
+         $controller->softdelete();
         break;
 
     case preg_match('#^/article/([0-9]+)/soft_destroy$#i', $uri, $matches):
        
-            
+        $users_controller = new UsersController();
         if (isset($auth)) {
             $can = $users_controller->can(2, $users_controller->getRank($auth['id']));
             if ($can) {
@@ -189,7 +236,7 @@ switch (1) {
 
     case preg_match('#^/article/([0-9]+)/restore$#i', $uri, $matches):
        
-
+        $users_controller = new UsersController();
         if (isset($auth)) {
             $can = $users_controller->can(2, $users_controller->getRank($auth['id']));
             if ($can) {
