@@ -30,4 +30,14 @@ class Model
             return strtolower(static::class) . 's';
         }
     }
+
+    public static function delete($id)
+    {
+        $connexion = self::dbConnect();
+        $query = $connexion->prepare("DELETE FROM  " . self::guessTableName() . " WHERE id = :id");
+
+        $query->execute(['id' => $id]);
+
+        return this::find($id);
+    }
 }
