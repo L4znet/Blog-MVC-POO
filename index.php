@@ -29,35 +29,53 @@ if (isset($_SESSION['auth'])) {
 
 switch (1) {
 
-    case preg_match('#^/users/edit/([0-9]+)$#i', $uri, $matches):
+    case preg_match('#^/users/create$#', $uri):
+       
+         $controller = new UsersController();
+        if (isset($auth)) {
+            $can = $controller->can(2, $controller->getRank($auth['id']));
+            if ($can) {
+                $controller->store($_POST);
+            } else {
+                $controller->cant();
+            }
+        } else {
+            $controller->cant();
+        }
+        break;
+    case preg_match('#^/users/([0-9]+)/update$#i', $uri, $matches):
+       
+        $controller = new UsersController();
+        $controller->update($_POST, $matches[1]);
+
+        break;
+
+    case preg_match('#^/users/([0-9]+)/edit$#i', $uri, $matches):
        
         $controller = new UsersController();
          if (isset($auth)) {
              $can = $controller->can(2, $controller->getRank($auth['id']));
              if ($can) {
-                 $users = Users::find($matches[0]);
-                 $view = new View('users-manage');
-                 $data = compact('users');
-                 $view->render($data);
+                 $controller->edit($matches[1]);
              } else {
-                 $users_controller->cant();
+                 $controller->cant();
              }
          } else {
-             $users_controller->cant();
+             $controller->cant();
          }
         break;
-    case preg_match('#^/users/delete/([0-9]+)$#i', $uri):
+    case preg_match('#^/users/([0-9]+)/delete$#i', $uri, $matches):
        
         $controller = new UsersController();
          if (isset($auth)) {
              $can = $controller->can(2, $controller->getRank($auth['id']));
              if ($can) {
-                 $controller->delete($matches[0]);
+                 $controller->delete($matches[1]);
              } else {
-                 $users_controller->cant();
+                 $controller->cant();
              }
          } else {
-             $users_controller->cant();
+             $controller->cant();
          }
         break;
     case preg_match('#^/users/manage$#i', $uri):
@@ -68,26 +86,26 @@ switch (1) {
              if ($can) {
                  $controller->show();
              } else {
-                 $users_controller->cant();
+                 $controller->cant();
              }
          } else {
-             $users_controller->cant();
+             $controller->cant();
          }
         break;
 
     case preg_match('#^/users/logout$#i', $uri):
        $controller = new UsersController();
-        $users_controller->logout();
+        $controller->logout();
 
         break;
     case preg_match('#^/users/connect$#i', $uri):
        $controller = new UsersController();
-        $users_controller->index();
+        $controller->index();
 
         break;
     case preg_match('#^/users/auth$#i', $uri):
        $controller = new UsersController();
-        $users_controller->auth($_POST);
+        $controller->auth($_POST);
 
         break;
 
